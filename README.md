@@ -20,12 +20,11 @@ yarn add @idui/react-mask-input
 ```
 
 ### Advantages
-- Fully customizable
-- Smart
-- Adjusts the entered/inserted value to the mask
+- Fully customizable, smart
+- Adjusts entered/inserted value to the mask
 - Able to define mask by custom tokens
 - Accepts custom validation applied before setting value
-- Jumps over tokens on RightArrow/LeftArrow keyDown and during input/erase
+- Jumps over tokens on RightArrow/LeftArrow keyDown and during input/erasing
 - Able to show maskPlaceholder and value in different colors
 
 ### See props in [Docs](https://id-ui.github.io/react-mask-input/?path=/docs/maskinput--playground)
