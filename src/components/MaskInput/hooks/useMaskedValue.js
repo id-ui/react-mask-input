@@ -36,12 +36,6 @@ export default ({
     applyMask(providedValue || '', mask, tokens)
   );
 
-  const initMaskedValue = useCallback(() => {
-    if (!value && tokens[0]) {
-      _setValue(tokens[0]);
-    }
-  }, [tokens, value]);
-
   useEffect(() => {
     const maskedValue = applyMask(providedValue || '', mask, tokens);
 
@@ -135,6 +129,5 @@ export default ({
     value,
     insertSymbols,
     removeSymbols,
-    initMaskedValue,
   };
 };

@@ -149,6 +149,9 @@ describe('MaskInput', () => {
 
     const input = getByTestId('input');
 
+    const placeholderContainer = input.previousElementSibling;
+    user.click(placeholderContainer);
+
     fireEvent.paste(input, {
       clipboardData: {
         getData: () => '9041487623',

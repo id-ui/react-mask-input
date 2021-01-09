@@ -28,7 +28,7 @@ export const Input = styled.input`
   border: none;
   outline: none;
   position: relative;
-  z-index: 2;
+  z-index: ${ifProp('isFocused', 2, 0)};
   background-color: inherit;
   font-size: inherit;
 `;

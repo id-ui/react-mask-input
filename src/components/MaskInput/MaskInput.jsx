@@ -34,7 +34,6 @@ function MaskInput(
     value,
     insertSymbols,
     removeSymbols,
-    initMaskedValue,
   } = useMaskedValue({
     mask: providedMask,
     maskPlaceholder: providedMaskPlaceholder,
@@ -101,10 +100,9 @@ function MaskInput(
   const [isFocused, setFocused] = useState(false);
 
   const handleFocus = useCallback(() => {
-    initMaskedValue();
     setFocused(true);
     onFocus();
-  }, [initMaskedValue, onFocus]);
+  }, [onFocus]);
 
   const handleBlur = useCallback(
     (e) => {
@@ -155,21 +153,23 @@ function MaskInput(
     [insertSymbols, moveCursor]
   );
 
+  const currentValue = isFocused || value !== tokens[0] ? value : '';
+
   const shouldShowMaskPlaceholder =
     isFocused ||
-    (alwaysShowMaskPlaceholder && (!placeholder || value.length > 0));
+    (alwaysShowMaskPlaceholder && (!placeholder || currentValue.length > 0));
 
   return (
     <Container>
       <Placeholder onClick={setFocus} disabled={disabled}>
         {shouldShowMaskPlaceholder && (
-          <Placeholder.Hidden>{value}</Placeholder.Hidden>
+          <Placeholder.Hidden>{currentValue}</Placeholder.Hidden>
         )}
         {!disabled && (
           <Placeholder.Visible>
             {shouldShowMaskPlaceholder
-              ? maskPlaceholder.substring(value.length)
-              : !value.length
+              ? maskPlaceholder.substring(currentValue.length)
+              : !currentValue.length
               ? placeholder
               : ''}
           </Placeholder.Visible>
@@ -177,13 +177,14 @@ function MaskInput(
       </Placeholder>
       <Input
         ref={inputRef}
-        value={value}
+        value={currentValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onPaste={handlePaste}
         disabled={disabled}
+        isFocused={isFocused}
         {...inputProps}
         type="text"
       />
