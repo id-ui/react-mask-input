@@ -99,10 +99,13 @@ function MaskInput(
 
   const [isFocused, setFocused] = useState(false);
 
-  const handleFocus = useCallback(() => {
-    setFocused(true);
-    onFocus();
-  }, [onFocus]);
+  const handleFocus = useCallback(
+    (e) => {
+      setFocused(true);
+      onFocus(e);
+    },
+    [onFocus]
+  );
 
   const handleBlur = useCallback(
     (e) => {
