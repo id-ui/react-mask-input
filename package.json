@@ -10,6 +10,13 @@
   "engines": {
     "node": ">=10"
   },
+  "keywords": [
+    "react",
+    "react-component",
+    "react-mask",
+    "mask-input",
+    "react-mask-input"
+  ],
   "scripts": {
     "start": "start-storybook",
     "deploy-storybook": "storybook-to-ghpages",
