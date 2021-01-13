@@ -43,6 +43,7 @@ function Example() {
         onChange={setValue}
         mask="9999 9999 9999 9999"
         maskPlaceholder="0000 0000 0000 0000"
+        fitWidthToMask={false} // whether resize input to mask width or not, default false
         placeholder="Enter Card Number"
     />;
 }

@@ -144,6 +144,7 @@ describe('MaskInput', () => {
         maskPlaceholder="+7 (___)-___-__-__"
         placeholder="Enter your phone number"
         onChange={onChange}
+        fitWidthToMask
       />
     );
 

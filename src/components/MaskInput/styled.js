@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ifProp, prop } from 'styled-tools';
+import { ifProp, prop, withProp } from 'styled-tools';
 
 export const Container = styled.div`
   position: relative;
@@ -18,13 +18,20 @@ Placeholder.Hidden = styled.span`
   z-index: -1;
 `;
 
+Placeholder.Measurer = styled(Placeholder.Hidden)`
+  position: absolute;
+  white-space: nowrap;
+`;
+
 Placeholder.Visible = styled.span`
   position: relative;
   z-index: 1;
 `;
 
 export const Input = styled.input`
-  width: 100%;
+  width: ${withProp('maskWidth', (maskWidth) =>
+    maskWidth ? `${maskWidth}px` : '100%'
+  )};
   border: none;
   outline: none;
   position: relative;

@@ -9,6 +9,7 @@ function MaskInput(
     onChange,
     mask: providedMask,
     maskPlaceholder: providedMaskPlaceholder,
+    fitWidthToMask,
     validateMaskedValue,
     tokens: customTokens,
     defaultSymbolPlaceholder,
@@ -27,6 +28,17 @@ function MaskInput(
   if (ref) {
     inputRef = ref;
   }
+
+  const [maskWidth, setMaskWidth] = useState(0);
+
+  const handlePlaceholderRef = useCallback(
+    (placeholderNode) => {
+      if (placeholderNode && fitWidthToMask) {
+        setMaskWidth(placeholderNode.clientWidth);
+      }
+    },
+    [fitWidthToMask]
+  );
 
   const {
     tokens,
@@ -165,6 +177,9 @@ function MaskInput(
   return (
     <Container>
       <Placeholder onClick={setFocus} disabled={disabled}>
+        <Placeholder.Measurer ref={handlePlaceholderRef}>
+          {maskPlaceholder}
+        </Placeholder.Measurer>
         {shouldShowMaskPlaceholder && (
           <Placeholder.Hidden>{currentValue}</Placeholder.Hidden>
         )}
@@ -188,6 +203,7 @@ function MaskInput(
         onPaste={handlePaste}
         disabled={disabled}
         isFocused={isFocused}
+        maskWidth={maskWidth}
         {...inputProps}
         type="text"
       />
@@ -205,11 +221,13 @@ MaskInputWithRef.defaultProps = {
   alwaysShowMaskPlaceholder: true,
   defaultSymbolPlaceholder: ' ',
   validateMaskedValue: () => true,
+  fitWidthToMask: false,
 };
 
 MaskInputWithRef.propTypes = {
   mask: PropTypes.string,
   maskPlaceholder: PropTypes.string,
+  fitWidthToMask: PropTypes.bool,
   validateMaskedValue: PropTypes.func,
   tokens: PropTypes.objectOf(PropTypes.string),
   defaultSymbolPlaceholder: PropTypes.string,

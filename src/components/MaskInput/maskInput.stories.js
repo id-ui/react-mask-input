@@ -16,6 +16,16 @@ export default {
       description:
         'value filler shown in input while value filling not complete. Must be the same length as mask.',
     },
+    fitWidthToMask: {
+      control: 'boolean',
+      description: 'whether fit input width to mask width or not',
+      defaultValue: false,
+      table: {
+        defaultValue: {
+          summary: false,
+        },
+      },
+    },
     validateMaskedValue: {
       disable: true,
       description:
