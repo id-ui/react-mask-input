@@ -213,17 +213,6 @@ function MaskInput(
 
 const MaskInputWithRef = React.forwardRef(MaskInput);
 
-MaskInputWithRef.defaultProps = {
-  onChange: () => {},
-  onFocus: () => {},
-  onBlur: () => {},
-  onKeyDown: () => {},
-  alwaysShowMaskPlaceholder: true,
-  defaultSymbolPlaceholder: ' ',
-  validateMaskedValue: () => true,
-  fitWidthToMask: false,
-};
-
 MaskInputWithRef.propTypes = {
   mask: PropTypes.string,
   maskPlaceholder: PropTypes.string,
@@ -241,6 +230,17 @@ MaskInputWithRef.propTypes = {
   placeholder: PropTypes.string,
   name: PropTypes.string,
   tabIndex: PropTypes.number,
+};
+
+MaskInputWithRef.defaultProps = {
+    onChange: () => {},
+    onFocus: () => {},
+    onBlur: () => {},
+    onKeyDown: () => {},
+    alwaysShowMaskPlaceholder: true,
+    defaultSymbolPlaceholder: ' ',
+    validateMaskedValue: () => true,
+    fitWidthToMask: false,
 };
 
 export default MaskInputWithRef;
