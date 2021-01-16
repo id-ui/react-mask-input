@@ -39,15 +39,15 @@ export interface MaskInputProps {
     /**
      * focus input handler
      */
-    onFocus?: (event: React.SyntheticEvent) => void;
+    onFocus?: React.EventHandler<void>;
     /**
      * blur input handler
      */
-    onBlur?: (event: React.SyntheticEvent) => void;
+    onBlur?: React.EventHandler<void>;
     /**
      * keyDown input handler
      */
-    onKeyDown?: (event: React.SyntheticEvent) => void;
+    onKeyDown?: React.EventHandler<void>;
     /**
      * whether show maskPlaceholder even if input is not activeElement or not
      * @default true, but it would be false if placeholder provided

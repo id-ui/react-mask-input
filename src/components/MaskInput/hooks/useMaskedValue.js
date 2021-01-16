@@ -38,7 +38,6 @@ export default ({
 
   useEffect(() => {
     const maskedValue = applyMask(providedValue || '', mask, tokens);
-
     if (validateMaskedValue(maskedValue)) {
       _setValue(maskedValue);
     }
