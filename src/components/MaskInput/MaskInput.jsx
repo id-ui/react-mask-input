@@ -19,6 +19,8 @@ function MaskInput(
     onKeyDown,
     onFocus,
     onBlur,
+    onPaste,
+    processPastedValue,
     ...inputProps
   },
   ref
@@ -151,13 +153,19 @@ function MaskInput(
     (e) => {
       e.preventDefault();
 
+      if (onPaste) {
+        return onPaste(e);
+      }
+
       const { selectionStart, selectionEnd } = e.target;
-      const pastedText = (e.clipboardData || window.clipboardData).getData(
+      const pastedValue = (e.clipboardData || window.clipboardData).getData(
         'text'
       );
 
+      const processedPastedValue = processPastedValue(pastedValue, e);
+
       const insertPosition = insertSymbols(
-        pastedText,
+        processedPastedValue,
         selectionStart,
         selectionEnd - selectionStart
       );
@@ -165,7 +173,7 @@ function MaskInput(
         typeof insertPosition === 'number' ? insertPosition : selectionStart - 1
       );
     },
-    [insertSymbols, moveCursor]
+    [insertSymbols, moveCursor, processPastedValue, onPaste]
   );
 
   const currentValue = isFocused || value !== tokens[0] ? value : '';
@@ -224,8 +232,10 @@ MaskInputWithRef.propTypes = {
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
+  onPaste: PropTypes.func,
   onKeyDown: PropTypes.func,
   alwaysShowMaskPlaceholder: PropTypes.bool,
+  processPastedValue: PropTypes.bool,
 
   placeholder: PropTypes.string,
   name: PropTypes.string,
@@ -233,14 +243,15 @@ MaskInputWithRef.propTypes = {
 };
 
 MaskInputWithRef.defaultProps = {
-    onChange: () => {},
-    onFocus: () => {},
-    onBlur: () => {},
-    onKeyDown: () => {},
-    alwaysShowMaskPlaceholder: true,
-    defaultSymbolPlaceholder: ' ',
-    validateMaskedValue: () => true,
-    fitWidthToMask: false,
+  onChange: () => {},
+  onFocus: () => {},
+  onBlur: () => {},
+  onKeyDown: () => {},
+  alwaysShowMaskPlaceholder: true,
+  defaultSymbolPlaceholder: ' ',
+  validateMaskedValue: () => true,
+  fitWidthToMask: false,
+  processPastedValue: (value) => value,
 };
 
 export default MaskInputWithRef;

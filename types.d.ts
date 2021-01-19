@@ -37,22 +37,32 @@ export interface MaskInputProps {
      */
     defaultSymbolPlaceholder?: string;
     /**
-     * focus input handler
+     * focus event handler
      */
     onFocus?: React.EventHandler<void>;
     /**
-     * blur input handler
+     * blur event handler
      */
     onBlur?: React.EventHandler<void>;
     /**
-     * keyDown input handler
+     * keyDown event handler
      */
     onKeyDown?: React.EventHandler<void>;
+    /**
+     * paste event handler (not recommended, if specified mask input won't call default paste handler)
+     */
+    onPaste?: React.EventHandler<void>;
     /**
      * whether show maskPlaceholder even if input is not activeElement or not
      * @default true, but it would be false if placeholder provided
      */
     alwaysShowMaskPlaceholder?: boolean;
+    /**
+     * pasted text processor
+     * @param pastedValue
+     * @param event
+     */
+    processPastedValue?: (pastedValue: string, event: React.SyntheticEvent) => string;
      /**
      * can value be empty or not
      */

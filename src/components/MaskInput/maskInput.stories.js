@@ -45,6 +45,10 @@ export default {
         },
       },
     },
+    processPastedValue: {
+      disable: true,
+      description: 'pasted value processor',
+    },
     tokens: {
       control: 'object',
       description:
@@ -65,19 +69,24 @@ export default {
     },
     onChange: {
       action: 'onChange',
-      description: 'change input handler',
+      description: 'change event handler',
     },
     onFocus: {
       action: 'onFocus',
-      description: 'focus input handler',
+      description: 'focus event handler',
     },
     onBlur: {
       action: 'onBlur',
-      description: 'blur input handler',
+      description: 'blur event handler',
     },
     onKeyDown: {
       action: 'onKeyDown',
-      description: 'keyDown input handler',
+      description: 'keyDown event handler',
+    },
+    onPaste: {
+      disable: true,
+      description:
+        "paste event handler (not recommended, if specified mask input won't call default paste handler)",
     },
     placeholder: {
       control: 'text',
