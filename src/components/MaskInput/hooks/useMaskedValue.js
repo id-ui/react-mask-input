@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   applyMask,
   buildDefaultMaskPlaceholder,
@@ -16,10 +16,8 @@ export default ({
   value: providedValue,
   onChange,
 }) => {
-  const mask = useMemo(() => (customTokens ? '' : providedMask), [
-    customTokens,
-    providedMask,
-  ]);
+  const mask = customTokens ? '' : providedMask;
+
   const maskPlaceholder = useMemo(
     () =>
       providedMaskPlaceholder ||
@@ -43,84 +41,74 @@ export default ({
     }
   }, [mask, providedValue, tokens, validateMaskedValue]);
 
-  const updateValue = useCallback(
-    (newValue) => {
-      const formattedValue = applyMask(newValue, mask, tokens);
-      if (!mask || formattedValue.length <= mask.length) {
-        if (!validateMaskedValue(formattedValue)) {
-          return false;
-        }
-
-        _setValue(formattedValue);
-        if (
-          (!mask ||
-            [(tokens[0] || '').length, mask.length].includes(
-              formattedValue.length
-            )) &&
-          value !== formattedValue
-        ) {
-          onChange(
-            formattedValue.length === (tokens[0] || '').length
-              ? ''
-              : formattedValue
-          );
-        }
-
-        return formattedValue;
+  const updateValue = (newValue) => {
+    const formattedValue = applyMask(newValue, mask, tokens);
+    if (!mask || formattedValue.length <= mask.length) {
+      if (!validateMaskedValue(formattedValue)) {
+        return false;
       }
-    },
-    [mask, tokens, validateMaskedValue, value, onChange]
-  );
 
-  const insertSymbols = useCallback(
-    (symbols, position, shift = 0) => {
-      const valueWithoutTokens = removeTokens(value, tokens);
-      const symbolsWithoutTokens = removeTokens(symbols, tokens, position);
+      _setValue(formattedValue);
+      if (
+        (!mask ||
+          [(tokens[0] || '').length, mask.length].includes(
+            formattedValue.length
+          )) &&
+        value !== formattedValue
+      ) {
+        onChange(
+          formattedValue.length === (tokens[0] || '').length
+            ? ''
+            : formattedValue
+        );
+      }
 
-      const offset = getTokensOffsetBefore(position, tokens);
+      return formattedValue;
+    }
+  };
 
-      const insertPosition = position - offset;
+  const insertSymbols = (symbols, position, shift = 0) => {
+    const valueWithoutTokens = removeTokens(value, tokens);
+    const symbolsWithoutTokens = removeTokens(symbols, tokens, position);
 
-      const newValue = `${valueWithoutTokens.substring(
-        0,
-        insertPosition
-      )}${symbolsWithoutTokens}${valueWithoutTokens.substring(
-        position - offset + shift
-      )}`;
+    const offset = getTokensOffsetBefore(position, tokens);
 
-      const isSuccess = updateValue(newValue) !== false;
+    const insertPosition = position - offset;
 
-      const tokenAtPosition = tokens[position] || '';
-      const tokenAfterCurrentValue = tokens[newValue.length + offset] || '';
-      return (
-        isSuccess &&
-        position +
-          symbols.length +
-          (symbols.length - symbolsWithoutTokens.length) +
-          tokenAfterCurrentValue.length +
-          tokenAtPosition.length
-      );
-    },
-    [tokens, updateValue, value]
-  );
+    const newValue = `${valueWithoutTokens.substring(
+      0,
+      insertPosition
+    )}${symbolsWithoutTokens}${valueWithoutTokens.substring(
+      position - offset + shift
+    )}`;
 
-  const removeSymbols = useCallback(
-    (position, length, isForward) => {
-      const tokenLength = tokens[position] ? tokens[position].length : 0;
+    const isSuccess = updateValue(newValue) !== false;
 
-      const insertPosition =
-        position + (isForward ? tokenLength : -tokenLength);
+    const tokenAtPosition = tokens[position] || '';
+    const tokenAfterCurrentValue = tokens[newValue.length + offset] || '';
+    return (
+      isSuccess &&
+      position +
+        symbols.length +
+        (symbols.length - symbolsWithoutTokens.length) +
+        tokenAfterCurrentValue.length +
+        tokenAtPosition.length
+    );
+  };
 
-      const isSuccess = insertSymbols(
-        '',
-        position + (isForward ? tokenLength : -tokenLength),
-        length || 1
-      );
+  const removeSymbols = (position, length, isForward) => {
+    const tokenLength = tokens[position] ? tokens[position].length : 0;
 
-      return isSuccess !== false && insertPosition;
-    },
-    [insertSymbols, tokens]
-  );
+    const insertPosition = position + (isForward ? tokenLength : -tokenLength);
+
+    const isSuccess = insertSymbols(
+      '',
+      position + (isForward ? tokenLength : -tokenLength),
+      length || 1
+    );
+
+    return isSuccess !== false && insertPosition;
+  };
 
   return {
     tokens,

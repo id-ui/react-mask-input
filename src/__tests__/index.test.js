@@ -36,7 +36,7 @@ describe('MaskInput', () => {
     user.type(input, '90');
 
     const placeholderContainer = input.previousElementSibling;
-    const hiddenPlaceholderPart = placeholderContainer.firstElementChild;
+    const hiddenPlaceholderPart = placeholderContainer.childNodes[1];
     const visiblePlaceholderPart = placeholderContainer.lastElementChild;
 
     expect(hiddenPlaceholderPart.textContent).toBe('+7 (90');
@@ -103,13 +103,13 @@ describe('MaskInput', () => {
     const input = getByTestId('input');
     const placeholderContainer = input.previousElementSibling;
 
-    expect(placeholderContainer.childElementCount).toBe(1);
-
-    user.click(placeholderContainer);
     expect(placeholderContainer.childElementCount).toBe(2);
 
+    user.click(placeholderContainer);
+    expect(placeholderContainer.childElementCount).toBe(3);
+
     input.blur();
-    expect(placeholderContainer.childElementCount).toBe(1);
+    expect(placeholderContainer.childElementCount).toBe(2);
   });
 
   // TODO ???
@@ -248,7 +248,7 @@ describe('MaskInput', () => {
     user.type(input, '12');
 
     const placeholderContainer = input.previousElementSibling;
-    const hiddenPlaceholderPart = placeholderContainer.firstElementChild;
+    const hiddenPlaceholderPart = placeholderContainer.childNodes[1];
     const visiblePlaceholderPart = placeholderContainer.lastElementChild;
     expect(hiddenPlaceholderPart.textContent).toBe('12');
     expect(visiblePlaceholderPart.textContent).toBe('_)');

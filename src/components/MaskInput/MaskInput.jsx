@@ -58,123 +58,107 @@ function MaskInput(
     customTokens,
   });
 
-  const moveCursor = useCallback((position) => {
+  const moveCursor = (position) => {
     setTimeout(() => {
       if (inputRef.current) {
         inputRef.current.setSelectionRange(position, position);
       }
     }, 0);
-  }, []);
+  };
 
-  const handleKeyDown = useCallback(
-    (e) => {
-      onKeyDown(e);
+  const handleKeyDown = (e) => {
+    onKeyDown(e);
 
-      switch (e.keyCode) {
-        // Backspace, Delete
-        case 8:
-        case 46: {
-          e.preventDefault();
-          const { selectionStart, selectionEnd } = e.target;
-          const isForward = e.keyCode === 46;
+    switch (e.keyCode) {
+      // Backspace, Delete
+      case 8:
+      case 46: {
+        e.preventDefault();
+        const { selectionStart, selectionEnd } = e.target;
+        const isForward = e.keyCode === 46;
 
-          const position = removeSymbols(
-            isForward ? selectionStart : selectionStart - 1,
-            selectionEnd - selectionStart,
-            isForward
-          );
+        const position = removeSymbols(
+          isForward ? selectionStart : selectionStart - 1,
+          selectionEnd - selectionStart,
+          isForward
+        );
 
-          moveCursor(typeof position === 'number' ? position : selectionStart);
+        moveCursor(typeof position === 'number' ? position : selectionStart);
 
-          break;
-        }
-        // ArrowLeft, ArrowRight
-        case 37:
-        case 39: {
-          const { selectionStart } = e.target;
-          const isForward = e.keyCode === 39;
-
-          const token = tokens[isForward ? selectionStart : selectionStart - 2];
-          if (!token) {
-            return;
-          }
-
-          e.preventDefault();
-          moveCursor(
-            selectionStart +
-              (isForward ? token.length + 1 : -(token.length + 1))
-          );
-          break;
-        }
+        break;
       }
-    },
-    [moveCursor, onKeyDown, removeSymbols, tokens]
-  );
+      // ArrowLeft, ArrowRight
+      case 37:
+      case 39: {
+        const { selectionStart } = e.target;
+        const isForward = e.keyCode === 39;
+
+        const token = tokens[isForward ? selectionStart : selectionStart - 2];
+        if (!token) {
+          return;
+        }
+
+        e.preventDefault();
+        moveCursor(
+          selectionStart + (isForward ? token.length + 1 : -(token.length + 1))
+        );
+        break;
+      }
+    }
+  };
 
   const [isFocused, setFocused] = useState(false);
 
-  const handleFocus = useCallback(
-    (e) => {
-      setFocused(true);
-      onFocus(e);
-    },
-    [onFocus]
-  );
+  const handleFocus = (e) => {
+    setFocused(true);
+    onFocus(e);
+  };
 
-  const handleBlur = useCallback(
-    (e) => {
-      setFocused(false);
-      onBlur(e);
-    },
-    [onBlur]
-  );
+  const handleBlur = (e) => {
+    setFocused(false);
+    onBlur(e);
+  };
 
-  const setFocus = useCallback(() => {
+  const setFocus = () => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, []);
+  };
 
-  const handleChange = useCallback(
-    (e) => {
-      const { selectionStart } = e.target;
+  const handleChange = (e) => {
+    const { selectionStart } = e.target;
 
-      const symbol = e.nativeEvent.data;
-      const insertPosition = insertSymbols(symbol, selectionStart - 1);
+    const symbol = e.nativeEvent.data;
+    const insertPosition = insertSymbols(symbol, selectionStart - 1);
 
-      moveCursor(
-        typeof insertPosition === 'number' ? insertPosition : selectionStart - 1
-      );
-    },
-    [insertSymbols, moveCursor]
-  );
+    moveCursor(
+      typeof insertPosition === 'number' ? insertPosition : selectionStart - 1
+    );
+  };
 
-  const handlePaste = useCallback(
-    (e) => {
-      e.preventDefault();
+  const handlePaste = (e) => {
+    e.preventDefault();
 
-      if (onPaste) {
-        return onPaste(e);
-      }
+    if (onPaste) {
+      return onPaste(e);
+    }
 
-      const { selectionStart, selectionEnd } = e.target;
-      const pastedValue = (e.clipboardData || window.clipboardData).getData(
-        'text'
-      );
+    const { selectionStart, selectionEnd } = e.target;
+    const pastedValue = (e.clipboardData || window.clipboardData).getData(
+      'text'
+    );
 
-      const processedPastedValue = processPastedValue(pastedValue, e);
+    const processedPastedValue = processPastedValue(pastedValue, e);
 
-      const insertPosition = insertSymbols(
-        processedPastedValue,
-        selectionStart,
-        selectionEnd - selectionStart
-      );
-      moveCursor(
-        typeof insertPosition === 'number' ? insertPosition : selectionStart - 1
-      );
-    },
-    [insertSymbols, moveCursor, processPastedValue, onPaste]
-  );
+    const insertPosition = insertSymbols(
+      processedPastedValue,
+      selectionStart,
+      selectionEnd - selectionStart
+    );
+    moveCursor(
+      typeof insertPosition === 'number' ? insertPosition : selectionStart - 1
+    );
+  };
 
   const currentValue = isFocused || value !== tokens[0] ? value : '';
 
@@ -235,7 +219,7 @@ MaskInputWithRef.propTypes = {
   onPaste: PropTypes.func,
   onKeyDown: PropTypes.func,
   alwaysShowMaskPlaceholder: PropTypes.bool,
-  processPastedValue: PropTypes.bool,
+  processPastedValue: PropTypes.func,
 
   placeholder: PropTypes.string,
   name: PropTypes.string,
